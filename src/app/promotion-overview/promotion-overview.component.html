@@ -1,0 +1,46 @@
+<form [formGroup]="overviewForm">
+  <div class="field-radio-button">
+    Customer Type*:
+    <span *ngFor="let consumer of customerType">
+      <p-radioButton
+        [inputId]="consumer.key"
+        name="customerType"
+        [value]="consumer.key"
+        formControlName="customerType"
+        class="field"
+      ></p-radioButton>
+      <label [for]="consumer.key" class="field-label">{{
+        consumer.name
+      }}</label>
+    </span>
+  </div>
+  <div class="field-radio-button">
+    Channels:
+    <span *ngFor="let channel of channels" class="p-field-checkbox">
+      <p-checkbox
+        name="group2"
+        value="channel"
+        [value]="channel.key"
+        [formControl]="overviewForm.controls['channels']"
+        class="field"
+      ></p-checkbox>
+      <label [for]="channel.key" class="field-label">{{ channel.name }}</label>
+    </span>
+  </div>
+
+  <div class="field-radio-button">
+    Promotion Type*:
+    <span *ngFor="let promption of promptionTypes">
+      <p-radioButton
+        [inputId]="promption.key"
+        name="promotionType"
+        [value]="promption.key"
+        formControlName="promotionType"
+        class="field"
+      ></p-radioButton>
+      <label [for]="promption.key" class="field-label">{{
+        promption.name
+      }}</label>
+    </span>
+  </div>
+</form>

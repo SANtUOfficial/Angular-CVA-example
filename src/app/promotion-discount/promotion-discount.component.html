@@ -1,0 +1,17 @@
+<form [formGroup]="codeAndDescriptionForm">
+  <div>
+    Promotion code*
+    <input type="text" pInputText formControlName="code" />
+  </div>
+
+  <div>
+    Marketing Type
+    <p-dropdown
+      formControlName="marketingType"
+      [options]="marketTypes"
+      optionLabel="name"
+      placeholder="Select Marketing Type"
+    ></p-dropdown>
+  </div>
+  <div>Marketing description</div>
+</form>
