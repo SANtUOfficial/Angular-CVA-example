@@ -1,11 +1,13 @@
 <p-card styleClass="user-form" class="flex align-items-center gap-1">
-  <div class="nav-bar">
+  <div class="nav-bar" style="float: right">
     <p-button label="Go Live" [disabled]="!formGroup.valid"></p-button>
     <p-button label="Save as Draft"></p-button>
   </div>
-
-  <form [formGroup]="formGroup">
-    Promotion Name* : <input type="text" pInputText formControlName="title" />
+  <div></div>
+  <form [formGroup]="formGroup" style="clear: both">
+    <div style="margin-bottom: 12px">
+      Promotion Name* : <input type="text" pInputText formControlName="title" />
+    </div>
 
     <p-accordion [activeIndex]="0">
       <p-accordionTab header="Promotion Overview">
@@ -14,22 +16,21 @@
             formControlName="promotionOverview"
           ></app-promotion-overview></p
       ></p-accordionTab>
-
       <p-accordionTab
         header="Code and Description"
         [disabled]="!formGroup.get('promotionOverview')?.valid"
       >
         <p>
-          section 2
-          <!-- <app-promotion-discount
+          <app-promotion-discount
             formControlName="marketTypes"
-          ></app-promotion-discount> -->
+          ></app-promotion-discount>
         </p>
       </p-accordionTab>
     </p-accordion>
+
     <div class="sections"></div>
   </form>
 
-  <pre>Form Value : {{ formGroup.value | json }}</pre>
+  <pre><div>Form Value :</div> {{ formGroup.value | json }}</pre>
   <pre>Form Status: <span [ngClass]="formGroup.status == 'VALID' ? 'green' : 'red'">{{ formGroup.status }}</span></pre>
 </p-card>

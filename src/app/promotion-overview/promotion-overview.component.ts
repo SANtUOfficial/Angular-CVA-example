@@ -1,15 +1,18 @@
-import { Component, Input, forwardRef, inject } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormsModule,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
+import { Component, Input, forwardRef, inject } from '@angular/core';
 
 import { CheckboxModule } from 'primeng/checkbox';
-import { CommonModule } from '@angular/common';
+import { NgFor } from '@angular/common';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 export const CUSTOM_CONTROL_VALUE_ACCESSOR: any = {
@@ -18,19 +21,24 @@ export const CUSTOM_CONTROL_VALUE_ACCESSOR: any = {
   multi: true,
 };
 
+export const CUSTOM_CONTROL_VALUE_VALIDATOR = {
+  provide: NG_VALIDATORS,
+  multi: true,
+  useExisting: forwardRef(() => PromotionOverviewComponent),
+};
 @Component({
   selector: 'app-promotion-overview',
   standalone: true,
   imports: [
-    RadioButtonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CommonModule,
     CheckboxModule,
+    FormsModule,
+    NgFor,
+    RadioButtonModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './promotion-overview.component.html',
   styleUrl: './promotion-overview.component.scss',
-  providers: [CUSTOM_CONTROL_VALUE_ACCESSOR],
+  providers: [CUSTOM_CONTROL_VALUE_ACCESSOR, CUSTOM_CONTROL_VALUE_VALIDATOR],
 })
 export class PromotionOverviewComponent implements ControlValueAccessor {
   @Input() disabled = false;
@@ -60,11 +68,11 @@ export class PromotionOverviewComponent implements ControlValueAccessor {
   overviewForm = this.fb.group({
     customerType: ['', Validators.required],
     channels: [''],
-    promotionType: [''],
+    promotionType: ['', Validators.required],
   });
 
-  private onChange: (value: any) => void = () => {};
-  private onTouched: () => void = () => {};
+  private onChange(value: any) {}
+  private onTouched() {}
 
   writeValue(value: any): void {
     if (value) {
@@ -72,19 +80,32 @@ export class PromotionOverviewComponent implements ControlValueAccessor {
     }
   }
 
-  // registerOnChange(fn: any): void {
-  //   this.overviewForm.valueChanges.subscribe(fn);
-  // }
-
-  registerOnChange(fn: (value: any) => void): void {
-    this.onChange = fn;
-    this.overviewForm.valueChanges.subscribe((value) => this.onChange(value));
+  registerOnChange(fn: any): void {
+    this.overviewForm.valueChanges.subscribe(fn);
   }
+
   registerOnTouched(fn: any): void {
     this.overviewForm.valueChanges.subscribe(fn);
   }
 
   setDisabledState(isDisabled: boolean): void {
     // isDisabled ? this.overviewForm.disable() : this.overviewForm.enable();
+  }
+
+  validate(): ValidationErrors | null {
+    const customerType: string = this.overviewForm.get('customerType')?.value!;
+    const channels: string = this.overviewForm.get('channels')?.value!;
+    const promotionType: string =
+      this.overviewForm.get('promotionType')?.value!;
+
+    if (customerType.trim() === '' || promotionType.trim() === '') {
+      return { required: true, message: 'fields are required.' };
+    }
+
+    if (channels.length === 0) {
+      return { required: true, message: 'fields are required.' };
+    }
+
+    return null; // Validation passed
   }
 }

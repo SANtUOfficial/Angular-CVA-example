@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PromotionDiscountComponent } from './promotion-discount/promotion-discount.component';
 import { PromotionOverviewComponent } from './promotion-overview/promotion-overview.component';
 import { RouterOutlet } from '@angular/router';
+import { TimelineModule } from 'primeng/timeline';
 
 @Component({
   selector: 'app-root',
@@ -34,12 +35,14 @@ import { RouterOutlet } from '@angular/router';
     ButtonModule,
     InputTextModule,
     AccordionModule,
+    TimelineModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'angular-cva';
+
   cities = [
     { name: 'New York', code: 'NY' },
     { name: 'Rome', code: 'RM' },
@@ -53,16 +56,9 @@ export class AppComponent {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      title: ['', Validators.required],
-      promotionOverview: this.fb.group({
-        customerType: ['', Validators.required],
-        channels: [''],
-        promotionType: [''],
-      }),
-      // marketTypes: this.fb.group({
-      //   code: ['', Validators.required],
-      //   marketingType: ['', Validators.required],
-      // }),
+      title: [this.title, Validators.required],
+      promotionOverview: [],
+      marketTypes: [],
     });
   }
 }
