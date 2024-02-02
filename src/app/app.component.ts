@@ -43,6 +43,8 @@ import { TimelineModule } from 'primeng/timeline';
 export class AppComponent {
   title = 'angular-cva';
 
+  isEdit = true;
+
   cities = [
     { name: 'New York', code: 'NY' },
     { name: 'Rome', code: 'RM' },
@@ -57,8 +59,26 @@ export class AppComponent {
   ngOnInit() {
     this.formGroup = this.fb.group({
       title: [this.title, Validators.required],
-      promotionOverview: [],
+      promotionOverview: {},
       marketTypes: [],
     });
+
+    if (this.isEdit) {
+      this.formGroup.reset({
+        title: 'Edit Promotion',
+        promotionOverview: {
+          customerType: 'commercial',
+          channels: ['commerical', 'consumer', 'cres'],
+          promotionType: 'explicitCode',
+        },
+        marketTypes: {
+          code: 'HOLIDAY',
+          marketingType: {
+            name: 'Domestic',
+            code: 'DO',
+          },
+        },
+      });
+    }
   }
 }
